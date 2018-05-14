@@ -50,6 +50,7 @@ export type Props = {
   getHeightForItem: ({ item: any, index: number }) => number,
   ListHeaderComponent?: ?React.ComponentType<any>,
   ListEmptyComponent?: ?React.ComponentType<any>,
+  ListFooterComponent?: ?React.ComponentType<any>,
   /**
    * Used to extract a unique key for a given item at the specified index. Key is used for caching
    * and as the react key to track item re-ordering. The default extractor checks `item.key`, then
@@ -219,6 +220,7 @@ export default class MasonryList extends React.Component<Props, State> {
       renderItem,
       ListHeaderComponent,
       ListEmptyComponent,
+      ListFooterComponent,
       keyExtractor,
       onEndReached,
       ...props
@@ -230,6 +232,10 @@ export default class MasonryList extends React.Component<Props, State> {
     let emptyElement;
     if (ListEmptyComponent) {
       emptyElement = <ListEmptyComponent />;
+    }
+    let footerElement;
+    if (ListFooterComponent) {
+      footerElement = <ListFooterComponent />
     }
 
     const content = (
@@ -270,6 +276,7 @@ export default class MasonryList extends React.Component<Props, State> {
       },
       headerElement,
       emptyElement && this.props.data.length === 0 ? emptyElement : content,
+      footerElement,
     );
 
     return scrollComponent;
