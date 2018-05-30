@@ -119,7 +119,7 @@ export default class MasonryList extends React.Component<Props, State> {
   state = _stateFromProps(this.props);
   _listRefs: Array<?VirtualizedList> = [];
   _scrollRef: ?ScrollView;
-  _endsReached = 0;
+  _endReached = false;
 
   componentWillReceiveProps(newProps: Props) {
     this.setState(_stateFromProps(newProps));
@@ -152,6 +152,7 @@ export default class MasonryList extends React.Component<Props, State> {
   };
 
   _onContentSizeChange = (width, height) => {
+    this._endReached = false;
     this._listRefs.forEach(
       list =>
         list &&
@@ -195,6 +196,16 @@ export default class MasonryList extends React.Component<Props, State> {
       list =>
         list && list._onMomentumScrollEnd && list._onMomentumScrollEnd(event),
     );
+  };
+
+  _onEndReached = event => {
+    if (this._endReached) {
+      return;
+    }
+    this._endReached = true;
+    if (this.props.onEndReached) {
+      this.props.onEndReached(event);
+    }
   };
 
   _getItemLayout = (columnIndex, rowIndex) => {
@@ -248,8 +259,7 @@ export default class MasonryList extends React.Component<Props, State> {
               renderItem({ item, index, column: col.index })}
             renderScrollComponent={this._renderScrollComponent}
             keyExtractor={keyExtractor}
-            onEndReached={onEndReached}
-            onEndReachedThreshold={this.props.onEndReachedThreshold}
+            onEndReached={this._onEndReached}
             removeClippedSubviews={false}
           />,
         )}
