@@ -234,6 +234,7 @@ export default class MasonryList extends React.Component<Props, State> {
       ListFooterComponent,
       keyExtractor,
       onEndReached,
+      listKey,
       ...props
     } = this.props;
     let headerElement;
@@ -255,7 +256,8 @@ export default class MasonryList extends React.Component<Props, State> {
           <VirtualizedList
             {...props}
             ref={ref => (this._listRefs[col.index] = ref)}
-            key={`$col_${col.index}`}
+            key={`${listKey}_${col.index}`}
+            listKey={`${listKey}_${col.index}`}
             data={col.data}
             getItemCount={this._getItemCount}
             getItem={this._getItem}
